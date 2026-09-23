@@ -20,10 +20,10 @@ function mostrarProductos(lista) {
   // Escribe aquí tu código
   const catalogo = document.getElementById("catalogo");
   catalogo.innerHTML = lista.map(p => `
-  <div class="bg-white rounded-lg shadow p-4 flex flex-col justify-between">
+  <div class="bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg shadow p-4 flex flex-col justify-between">
       <div>
         <h2 class="font-bold text-lg">${p.nombre}</h2>
-        <p class="text-gray-600">$${p.precio} MXN</p>
+        <p class="dark:text-gray-300">$${p.precio} MXN</p>
       </div>
       <button data-id="${p.id}" class="mt-4 bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition-colors">
         Agregar
@@ -55,16 +55,23 @@ catalogo.addEventListener('click', (evento) => {
   const id = Number(boton.dataset.id);
 
   const producto = productos.find(p => p.id === id);
-  pedido.push(producto);
+  const enPedido = pedido.find(p => p.id === id);
+
+  if (enPedido) {
+    enPedido.cantidad++;
+  } else {
+    pedido.push({ ...producto, cantidad: 1 });
+  }
+
   mostrarPedido();
 });
 
 function mostrarPedido() {
   listaPedido.innerHTML = pedido.map(p => `
-    <li>${p.nombre} - $${p.precio} MXN</li>
+    <li>${p.nombre} x${p.cantidad} - $${p.precio * p.cantidad} MXN</li>
   `).join('');
 
-  const total = pedido.reduce((suma, p) => suma + p.precio, 0);
+  const total = pedido.reduce((suma, p) => suma + (p.precio * p.cantidad), 0);
   totalEl.textContent = `Total: $${total} MXN`;
 }
 
@@ -104,3 +111,19 @@ function marcarActivo(botonActivo) {
   botonActivo.classList.remove('bg-white', 'text-gray-800');
   botonActivo.classList.add('bg-blue-600', 'text-white');
 }
+
+// modo oscuro
+const btnTema = document.getElementById("btn-tema");
+
+//al cargar, revusa si ya había un tema guardado
+if (localStorage.getItem("tema") === "oscuro") {
+  document.documentElement.classList.add("dark");
+}
+
+btnTema.addEventListener('click', () => {
+  document.documentElement.classList.toggle("dark");
+  const esOscuro = document.documentElement.classList.contains("dark");
+  localStorage.setItem("tema", esOscuro ? "oscuro" : "claro");
+});
+
+//
