@@ -12,3 +12,4 @@ export const productos = [
   { id: 5, nombre: 'Diagnóstico computarizado', precio: 220, categoria: 'Diagnóstico' },
   { id: 6, nombre: 'Cambio de llantas',      precio: 130, categoria: 'Reparación' },
 ]
+

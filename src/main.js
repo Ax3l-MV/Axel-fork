@@ -80,3 +80,27 @@ btnVaciar.addEventListener('click', () => {
 // ------------------------------------------------------------
 
 // Escribe aquí tu código del Ejercicio 4
+
+const filtros = document.getElementById("filtros");
+
+filtros.addEventListener('click', (evento) => {
+  const boton = evento.target.closest('button[data-categoria]');
+  if (!boton) return;
+
+  const categoria = boton.dataset.categoria;
+  const filtrados = categoria === "todos"
+    ? productos
+    : productos.filter(p => p.categoria === categoria);
+
+  mostrarProductos(filtrados);
+  marcarActivo(boton);
+});
+
+function marcarActivo(botonActivo) {
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.classList.remove('bg-blue-600', 'text-white');
+    btn.classList.add('bg-white', 'text-gray-800');
+  });
+  botonActivo.classList.remove('bg-white', 'text-gray-800');
+  botonActivo.classList.add('bg-blue-600', 'text-white');
+}
