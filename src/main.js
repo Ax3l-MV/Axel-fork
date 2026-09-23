@@ -43,9 +43,35 @@ mostrarProductos(productos)
 //   3. Dibuja el pedido con mostrarPedido() y calcula el total con .reduce().
 //   4. Botón "Vaciar pedido".
 // ------------------------------------------------------------
-const pedido = []
-
 // Escribe aquí tu código del Ejercicio 3
+const pedido = []
+const listaPedido = document.getElementById("lista-pedido");
+const totalEl = document.getElementById("total");
+const btnVaciar = document.getElementById("btn-vaciar");
+
+catalogo.addEventListener('click', (evento) => {
+  const boton = evento.target.closest('button[data-id]');
+  if (!boton) return;
+  const id = Number(boton.dataset.id);
+
+  const producto = productos.find(p => p.id === id);
+  pedido.push(producto);
+  mostrarPedido();
+});
+
+function mostrarPedido() {
+  listaPedido.innerHTML = pedido.map(p => `
+    <li>${p.nombre} - $${p.precio} MXN</li>
+  `).join('');
+
+  const total = pedido.reduce((suma, p) => suma + p.precio, 0);
+  totalEl.textContent = `Total: $${total} MXN`;
+}
+
+btnVaciar.addEventListener('click', () => {
+  pedido.length = 0;
+  mostrarPedido();
+});
 
 // ------------------------------------------------------------
 // EJERCICIO 4 — Filtrar por categoría
